@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+
 @RestController
 @RequestMapping("api/v1/cart")
 @CrossOrigin("*")
@@ -21,12 +23,14 @@ public class CartController {
 
 
 
-/*    @RequestMapping(method = RequestMethod.GET,path = "list")
-    public List<Cart> findAll(){
-       return service.findAll();
-    }*/
+    @RequestMapping(method = RequestMethod.GET,path = "hello")
+    @RolesAllowed("user")
+    public String findAll(){
+       return "Hello babe";
+    }
 
     @RequestMapping(method = RequestMethod.POST,path = "submitOrder")
+    @RolesAllowed("user")
     public ResponseEntity<?> submitOrder(@RequestParam(name = "access_token") String access_token,@RequestBody Order order){
         return ResponseEntity.ok().body(
                 service.prepareOrder(access_token,order)

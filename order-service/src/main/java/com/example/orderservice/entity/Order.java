@@ -37,10 +37,6 @@ public class Order {
     private LocalDate updated_at;
     private String payment_status;
     private String inventory_status;
-    @ManyToOne
-    @JoinColumn(name = "customer_id",insertable = false,updatable = false)
-    @JsonIgnore
-    private Customer customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();

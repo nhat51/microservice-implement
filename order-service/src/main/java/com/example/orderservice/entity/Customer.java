@@ -25,9 +25,9 @@ public class Customer {
     private String email;
     private String phone;
 
-    @OneToMany(mappedBy = "customer")
+   /* @OneToMany(mappedBy = "customer")
     private Set<Order> orders;
-
+*/
     public static Customer convertDTOtoEntity(CustomerDTO dto){
         Customer entity = new Customer();
         entity.setId(dto.getId());
