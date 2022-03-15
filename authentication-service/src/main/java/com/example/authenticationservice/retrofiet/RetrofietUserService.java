@@ -1,7 +1,9 @@
 package com.example.authenticationservice.retrofiet;
 
 import com.example.authenticationservice.credential.KeycloakAccessToken;
+import com.example.authenticationservice.entityDto.KeyCloakUserInfo;
 import com.example.authenticationservice.user.KeycloakUser;
+import org.springframework.web.bind.annotation.RequestParam;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -28,4 +30,7 @@ public interface RetrofietUserService {
 
     @DELETE("/auth/admin/realms/springboot-quickstart/users/{id}")
     Call<Void> delete(@Path("id") String id);
+
+    @GET("/auth/realms/springboot-quickstart/protocol/openid-connect/userinfo")
+    Call<KeyCloakUserInfo> getUserInfo();
 }

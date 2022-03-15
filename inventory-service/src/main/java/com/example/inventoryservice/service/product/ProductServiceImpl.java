@@ -1,8 +1,11 @@
 package com.example.inventoryservice.service.product;
 
 import com.example.inventoryservice.entity.Category;
+import com.example.inventoryservice.entity.ImportExportHistory;
 import com.example.inventoryservice.entity.Product;
+import com.example.inventoryservice.enums.Status;
 import com.example.inventoryservice.repositoty.CategoryRepository;
+import com.example.inventoryservice.repositoty.ImportExportHistoryRepository;
 import com.example.inventoryservice.repositoty.ProductRepository;
 import com.example.inventoryservice.response.ResponseApi;
 import com.example.inventoryservice.specification.ObjectFilter;
@@ -16,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +30,9 @@ public class ProductServiceImpl implements ProductService{
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ImportExportHistoryRepository importExportHistoryRepository;
     @Override
     public Page<Product> findAll(ObjectFilter filter) {
         Specification<Product> spec = Specification.where(null);
@@ -81,7 +88,16 @@ public class ProductServiceImpl implements ProductService{
             return new ResponseApi(HttpStatus.FOUND,"Product already exist","");
         }
         else {
+
            Product saved = productRepository.save(product);
+            ImportExportHistory importHistory = new ImportExportHistory();
+            assert saved != null;
+            importHistory.setProductId(saved.getId());
+            importHistory.setQuantity(product.getInStock());
+            importHistory.setProviderId(product.getProviderId());
+            importHistory.setCreated_at(LocalDate.now());
+            importHistory.setType(Status.HistoryType.IMPORT.name());
+            importExportHistoryRepository.save(importHistory);
             return new ResponseApi(HttpStatus.CREATED,"Success",saved);
         }
     }
@@ -101,7 +117,13 @@ public class ProductServiceImpl implements ProductService{
             exist.setThumbnail(product.getThumbnail());
             exist.setInStock(product.getInStock());
             exist.setCategoryId(product.getCategoryId());
-        
+        ImportExportHistory importHistory = new ImportExportHistory();
+        importHistory.setProductId(exist.getId());
+        importHistory.setQuantity(product.getInStock());
+        importHistory.setProviderId(product.getProviderId());
+        importHistory.setCreated_at(LocalDate.now());
+        importHistory.setType(Status.HistoryType.IMPORT.name());
+        importExportHistoryRepository.save(importHistory);
         productRepository.save(exist);
             return  new ResponseApi(HttpStatus.OK,"success",product);
 

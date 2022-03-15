@@ -21,8 +21,6 @@ public class CartController {
     @Autowired
     CartService service;
 
-
-
     @RequestMapping(method = RequestMethod.GET,path = "hello")
     @RolesAllowed("user")
     public String findAll(){

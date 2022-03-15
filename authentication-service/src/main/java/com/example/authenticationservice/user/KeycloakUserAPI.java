@@ -48,4 +48,10 @@ public class KeycloakUserAPI {
         }
         return new ResponseEntity<KeycloakUser>(HttpStatus.NOT_FOUND);
     }
+
+
+    @RequestMapping(method = RequestMethod.GET,path = "/info")
+    public ResponseEntity<Object> getInfo() throws IOException {
+        return  new ResponseEntity<Object>(keycloakService.userInfo(),HttpStatus.OK);
+    }
 }

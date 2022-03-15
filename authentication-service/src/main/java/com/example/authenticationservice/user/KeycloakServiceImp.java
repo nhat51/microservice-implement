@@ -1,6 +1,7 @@
 package com.example.authenticationservice.user;
 
 import com.example.authenticationservice.credential.KeycloakAccessToken;
+import com.example.authenticationservice.entityDto.KeyCloakUserInfo;
 import com.example.authenticationservice.retrofiet.RetrofietServiceGenerator;
 import com.example.authenticationservice.retrofiet.RetrofietUserService;
 import com.example.authenticationservice.util.KeycloakConstant;
@@ -38,6 +39,8 @@ public class KeycloakServiceImp implements KeycloakService {
         RetrofietUserService service
                 = RetrofietServiceGenerator.createService(RetrofietUserService.class);
         Response<KeycloakAccessToken> response = service.login(params).execute();
+        KeycloakAccessToken accessToken = response.body();
+        adminToken = accessToken.getAccess_token();
         if (response.isSuccessful()) {
             return response.body();
         }
@@ -81,6 +84,7 @@ public class KeycloakServiceImp implements KeycloakService {
     @Override
     public Optional<KeycloakUser> findById(String id) throws IOException {
         prepareAdminToken();
+
         RetrofietUserService service
                 = RetrofietServiceGenerator.createService(RetrofietUserService.class, adminToken);
         Response<KeycloakUser> response
@@ -130,6 +134,24 @@ public class KeycloakServiceImp implements KeycloakService {
     }
 
     @Override
+    public Optional<KeyCloakUserInfo> userInfo() throws IOException {
+        RetrofietUserService service
+                = RetrofietServiceGenerator.createService(RetrofietUserService.class,adminToken);
+        Response<KeyCloakUserInfo> response
+                = service.getUserInfo().execute();
+        /*KeyCloakUserInfo keyCloakUserInfo = response.body();
+        System.out.println(keyCloakUserInfo.toString());*/
+        if (!response.isSuccessful()) {
+            if (response.code() == HttpStatus.UNAUTHORIZED.value()
+                    || response.code() == HttpStatus.FORBIDDEN.value()) {
+                adminToken = null;
+            }
+            throw new IOException(response.message());
+        }
+        return Optional.ofNullable(response.body());
+    }
+
+    @Override
     public void prepareAdminToken() throws IOException {
         log.info("Token:" + adminToken);
         if (adminToken != null && adminToken.length() > 0) {
@@ -141,6 +163,5 @@ public class KeycloakServiceImp implements KeycloakService {
             throw new IOException();
         }
         adminToken = token.getAccess_token();
-
     }
 }
