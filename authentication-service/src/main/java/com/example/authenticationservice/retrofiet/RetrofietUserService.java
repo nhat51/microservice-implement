@@ -1,6 +1,7 @@
 package com.example.authenticationservice.retrofiet;
 
 import com.example.authenticationservice.credential.KeycloakAccessToken;
+import com.example.authenticationservice.entity.RoleKeyCloak;
 import com.example.authenticationservice.entityDto.KeyCloakUserInfo;
 import com.example.authenticationservice.user.KeycloakUser;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,6 +10,7 @@ import retrofit2.http.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface RetrofietUserService {
 
@@ -33,4 +35,7 @@ public interface RetrofietUserService {
 
     @GET("/auth/realms/springboot-quickstart/protocol/openid-connect/userinfo")
     Call<KeyCloakUserInfo> getUserInfo();
+
+    @POST("/auth/admin/realms/springboot-quickstart/users/{id}/role-mappings/realm")
+    Call<Void> addRoleUser(@Path("id") String id,@Body Set<RoleKeyCloak> roleKeyCloak);
 }

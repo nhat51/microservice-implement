@@ -13,7 +13,8 @@ import java.util.Set;
 @ToString
 public class OrderDto {
     private int orderId;
-    private int customerId;
+    private String customerId;
+    private String customerName;
     private double totalPrice;
     private String paymentStatus;
     private String inventoryStatus;
@@ -28,6 +29,7 @@ public class OrderDto {
         this.orderStatus = order.getStatus();
         this.paymentStatus = order.getPayment_status();
         this.inventoryStatus = order.getInventory_status();
+        this.customerName = order.getCustomerName();
         order.getOrderDetails().forEach(orderDetail -> {
             this.orderDetails.add(new OrderDetailDTO(orderDetail));
         });

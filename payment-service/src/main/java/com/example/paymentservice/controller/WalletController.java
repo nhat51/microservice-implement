@@ -15,7 +15,7 @@ public class WalletController {
 
 
     @RequestMapping(method = RequestMethod.GET,path = "wallet")
-    public ResponseEntity<?> getWallet(@RequestParam(name = "userId") int id){
+    public ResponseEntity<?> getWallet(@RequestParam(name = "userId") String id){
         return ResponseEntity.ok().body(service.getWallet(id));
     }
 }

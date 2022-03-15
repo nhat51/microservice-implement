@@ -12,11 +12,13 @@ import java.util.Set;
 @ToString
 public class OrderDto {
     private int orderId;
-    private int customerId;
+    private String customerId;
+    private String customerName;
     private double totalPrice;
     private String paymentStatus;
     private String inventoryStatus;
     private String orderStatus;
     private String message;
     private Set<OrderDetailDTO> orderDetails = new HashSet<>();
+
 }

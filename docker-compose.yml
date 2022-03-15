@@ -22,7 +22,7 @@ services:
       PMA_HOST: microservice-database
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
-    restart: always
+    restart: on-failure
     ports:
       - 3333:80
     networks:

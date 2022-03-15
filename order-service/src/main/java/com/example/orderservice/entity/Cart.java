@@ -19,8 +19,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "access_token")
-    private String accessToken;
+    private String userId;
     private double totalPrice;
     @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL)
     private Set<CartItem> items;

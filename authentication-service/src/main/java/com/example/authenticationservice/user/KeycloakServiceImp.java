@@ -1,6 +1,7 @@
 package com.example.authenticationservice.user;
 
 import com.example.authenticationservice.credential.KeycloakAccessToken;
+import com.example.authenticationservice.entity.RoleKeyCloak;
 import com.example.authenticationservice.entityDto.KeyCloakUserInfo;
 import com.example.authenticationservice.retrofiet.RetrofietServiceGenerator;
 import com.example.authenticationservice.retrofiet.RetrofietUserService;
@@ -8,16 +9,14 @@ import com.example.authenticationservice.util.KeycloakConstant;
 import com.example.authenticationservice.util.Peggable;
 import com.example.authenticationservice.util.Peggy;
 import com.example.authenticationservice.util.Specifearcation;
+import com.google.gson.Gson;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Log4j2
@@ -149,6 +148,22 @@ public class KeycloakServiceImp implements KeycloakService {
             throw new IOException(response.message());
         }
         return Optional.ofNullable(response.body());
+    }
+
+    @Override
+    public boolean addRoleUser(String id, RoleKeyCloak role) throws IOException {
+        prepareAdminToken();
+        RetrofietUserService service
+                = RetrofietServiceGenerator.createService(RetrofietUserService.class,adminToken);
+        System.out.println("Chay den day r");
+        Set<RoleKeyCloak> listRole = new HashSet<>();
+        listRole.add(role);
+        Response<Void> response =service.addRoleUser(id,listRole ).execute();
+        System.out.println(response);
+        if (response.isSuccessful()){
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -18,6 +18,6 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private double balance;
-    private int userId;
+    private String userId;
     private String name;
 }

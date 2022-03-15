@@ -1,6 +1,7 @@
 package com.example.authenticationservice.user;
 
 import com.example.authenticationservice.credential.KeycloakAccessToken;
+import com.example.authenticationservice.entity.RoleKeyCloak;
 import com.example.authenticationservice.entityDto.KeyCloakUserDto;
 import com.example.authenticationservice.util.Peggy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,13 @@ public class KeycloakUserAPI {
         return new ResponseEntity<KeycloakUser>(HttpStatus.NOT_FOUND);
     }
 
-
+    @RequestMapping(method = RequestMethod.POST, path ="{id}/role-mapping" )
+    public ResponseEntity<Object> addRoleToUser(@PathVariable String id, @RequestBody RoleKeyCloak roleKeyCloak) throws IOException {
+        if (!keycloakService.addRoleUser(id, roleKeyCloak)){
+            return new ResponseEntity<Object>("Fail",HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Object>("Successful",HttpStatus.OK);
+    }
     @RequestMapping(method = RequestMethod.GET,path = "/info")
     public ResponseEntity<Object> getInfo() throws IOException {
         return  new ResponseEntity<Object>(keycloakService.userInfo(),HttpStatus.OK);

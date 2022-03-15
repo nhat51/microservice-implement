@@ -1,6 +1,7 @@
 package com.example.authenticationservice.user;
 
 import com.example.authenticationservice.credential.KeycloakAccessToken;
+import com.example.authenticationservice.entity.RoleKeyCloak;
 import com.example.authenticationservice.entityDto.KeyCloakUserInfo;
 import com.example.authenticationservice.util.Peggable;
 import com.example.authenticationservice.util.Peggy;
@@ -21,4 +22,5 @@ public interface KeycloakService {
     boolean update(String id, KeycloakUser updateKeycloakUser) throws IOException;
     boolean delete(String id) throws IOException; // to soft delete, move to update.
     Optional<KeyCloakUserInfo> userInfo() throws IOException;
+    boolean addRoleUser(String userId, RoleKeyCloak role) throws IOException;
 }

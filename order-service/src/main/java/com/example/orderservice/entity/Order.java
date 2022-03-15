@@ -28,7 +28,8 @@ public class Order {
     @Column(name = "status")
     private String status;
     @Column(name = "customer_id")
-    private int customerId;
+    private String customerId;
+    private String customerName;
     @Column(name = "total_price")
     private double totalPrice;
     @Column(name = "created_at")

@@ -37,8 +37,8 @@ public class CartServiceImpl implements CartService {
     @Autowired
     RabbitTemplate rabbitTemplate;
     @Override
-    public ResponseApi addToCart(String access_token, CartItem cartItem) {
-        Cart exist = cartRepository.findCartByAccessToken(access_token);
+    public ResponseApi addToCart(String userId, CartItem cartItem) {
+        Cart exist = cartRepository.findCartByUserId(userId);
         //Kiểm tra người dùng có giỏ hàng hay chưa
         if (exist != null) {
             Set<CartItem> listCartItem = exist.getItems();
@@ -62,7 +62,7 @@ public class CartServiceImpl implements CartService {
         }
         Cart newCart = new Cart();
         Cart saved = cartRepository.save(newCart);
-        newCart.setAccessToken(access_token);
+        newCart.setUserId(userId);
         Set<CartItem> newCartItem = new HashSet<>();
         newCartItem.add(cartItem);
         cartItem.setCartId(saved.getId());
@@ -72,8 +72,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ResponseApi update(String access_token,CartItem cartItem) {
-        Cart exist = cartRepository.findCartByAccessToken(access_token);
+    public ResponseApi update(String userId,CartItem cartItem) {
+        Cart exist = cartRepository.findCartByUserId(userId);
         Set<CartItem> cartItemList = exist.getItems();
         for (CartItem item : cartItemList) {
             if (item.getProductId() == cartItem.getProductId()){
@@ -85,8 +85,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ResponseApi remove(String access_token,int productId) {
-        Cart exist = cartRepository.findCartByAccessToken(access_token);
+    public ResponseApi remove(String userId,int productId) {
+        Cart exist = cartRepository.findCartByUserId(userId);
         Set<CartItem> itemSet = exist.getItems();
         for (CartItem item: itemSet) {
             if (item.getProductId() == productId){
@@ -99,9 +99,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ResponseApi clear(String access_token) {
+    public ResponseApi clear(String userId) {
         //tìm cái cart theo access token
-        Cart exist = cartRepository.findCartByAccessToken(access_token);
+        Cart exist = cartRepository.findCartByUserId(userId);
         Set<CartItem> itemSet = exist.getItems();
         itemSet.clear();
         List<CartItem> cartItemList = cartItemRepository.findCartItemsByCart_Id(exist.getId());
@@ -111,8 +111,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ResponseApi getCart(String access_token) {
-        Cart cart = cartRepository.findCartByAccessToken(access_token);
+    public ResponseApi getCart(String userId) {
+        Cart cart = cartRepository.findCartByUserId(userId);
         cart.setTotalMoney();
         return new ResponseApi(HttpStatus.OK,"success",cart);
     }
@@ -121,9 +121,9 @@ public class CartServiceImpl implements CartService {
     * Chuyển từ cart sang order
     * */
     @Override
-    public ResponseApi prepareOrder(String access_token, Order order) {
+    public ResponseApi prepareOrder(String userId, Order order) {
         //tìm giỏ hàng theo access token
-        Cart cart = cartRepository.findCartByAccessToken(access_token);
+        Cart cart = cartRepository.findCartByUserId(userId);
         if (cart.getItems().size() == 0){
             return new ResponseApi(HttpStatus.BAD_REQUEST,"Bad request","Cart is empty");
         }
@@ -146,7 +146,6 @@ public class CartServiceImpl implements CartService {
             orderDetail.setProductId(cartItem.getProductId());
             orderDetails.add(orderDetail);
         }
-        order.setCustomerId(2);
         order.setStatus(Status.OrderStatus.PENDING.name());
         order.setPayment_status(Status.PaymentStatus.PENDING.name());
         order.setInventory_status(Status.InventoryStatus.PENDING.name());
@@ -154,7 +153,7 @@ public class CartServiceImpl implements CartService {
         order.setTotalPrice(cart.getTotalPrice());
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
-        clear(access_token);
+        clear(userId);
         cart.setTotalMoney();
         cartRepository.save(cart);
         try{

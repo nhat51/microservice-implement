@@ -20,7 +20,7 @@ public class WalletServiceImp implements WalletService{
     private RabbitTemplate rabbitTemplate;
 
     @Override
-    public Wallet getWallet(int id){
+    public Wallet getWallet(String id){
         return walletRepository.findWalletByUserId(id);
     }
 

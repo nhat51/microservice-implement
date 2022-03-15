@@ -18,7 +18,7 @@ public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer sender_id;
+    private String sender_id;
     private Integer receive_id;
     private Integer order_id;
     private String payment_type;

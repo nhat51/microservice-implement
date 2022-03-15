@@ -130,7 +130,7 @@ public class ConsumerService {
      * Nếu không hợp lệ thì set Status của payment thành UNPAID rồi gửi lên queue
      * */
     private Wallet checkWallet(OrderDto orderDto){
-        if (orderDto.getCustomerId() == 0){
+        if (orderDto.getCustomerId() == null){
             orderDto.setOrderStatus(Status.OrderStatus.REJECT.name());
             orderDto.setMessage(Status.OrderMessage.NOT_FOUND_USER);
             orderDto.setPaymentStatus(Status.PaymentStatus.UNPAID.name());

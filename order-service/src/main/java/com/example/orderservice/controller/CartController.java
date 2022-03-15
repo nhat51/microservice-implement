@@ -64,11 +64,11 @@ public class CartController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> getCart(@RequestParam(name = "access_token") String accessToken){
+    public ResponseEntity<?> getCart(@RequestParam(name = "userId") String userId){
         int accountId = 1; // lấy từ accessToken.
        /* Cart currentShoppingCart = service.getCart(accessToken);*/ // cho người dùng hiện tại.
         return ResponseEntity.ok().body(
-                service.getCart(accessToken)
+                service.getCart(userId)
         );
     }
 }
