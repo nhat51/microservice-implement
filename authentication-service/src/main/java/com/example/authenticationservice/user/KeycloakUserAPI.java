@@ -43,11 +43,11 @@ public class KeycloakUserAPI {
     @RequestMapping(method = RequestMethod.GET,path = "detail")
     public ResponseEntity<KeycloakUser> detail(
             @RequestParam(name = "id") String id) throws IOException {
-        Optional<KeycloakUser> keycloakUser = keycloakService.findById(id);
-        if (keycloakUser.isPresent()){
-            return new ResponseEntity<KeycloakUser>(keycloakUser.get(),HttpStatus.OK);
-        }
-        return new ResponseEntity<KeycloakUser>(HttpStatus.NOT_FOUND);
+            Optional<KeycloakUser> keycloakUser = keycloakService.findById(id);
+            if (keycloakUser.isPresent()){
+                return new ResponseEntity<KeycloakUser>(keycloakUser.get(),HttpStatus.OK);
+            }
+            return new ResponseEntity<KeycloakUser>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.POST, path ="{id}/role-mapping" )

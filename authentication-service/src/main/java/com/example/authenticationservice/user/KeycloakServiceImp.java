@@ -178,5 +178,6 @@ public class KeycloakServiceImp implements KeycloakService {
             throw new IOException();
         }
         adminToken = token.getAccess_token();
+
     }
 }
